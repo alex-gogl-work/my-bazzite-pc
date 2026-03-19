@@ -2,11 +2,16 @@
 
 set -ouex pipefail
 
-# 1. Добавляем репозиторий Google Antigravity (Актуально для 2026)
-dnf config-manager --add-repo https://packages.antigravity.google/rpm
+# 1. Создаем файл репозитория вручную (так надежнее в контейнере)
+cat <<EOF > /etc/yum.repos.d/antigravity.repo
+[antigravity]
+name=Google Antigravity
+baseurl=https://packages.antigravity.google/rpm
+enabled=1
+gpgcheck=0
+EOF
 
-# 2. Установка системных пакетов (Layering)
-# Эти программы будут вшиты в само ядро твоей системы
+# 2. Установка системных пакетов
 dnf install -y \
     antigravity \
     git \
@@ -17,5 +22,5 @@ dnf install -y \
     fastfetch \
     distrobox
 
-# 3. Очистка кэша, чтобы образ был легким
+# 3. Очистка
 dnf clean all
