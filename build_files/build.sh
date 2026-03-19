@@ -2,18 +2,9 @@
 
 set -ouex pipefail
 
-# 1. Создаем файл репозитория вручную (так надежнее в контейнере)
-cat <<EOF > /etc/yum.repos.d/antigravity.repo
-[antigravity]
-name=Google Antigravity
-baseurl=https://packages.antigravity.google/rpm
-enabled=1
-gpgcheck=0
-EOF
-
-# 2. Установка системных пакетов
+# 1. Установка проверенных системных пакетов
+# (Я убрал блок Antigravity, чтобы сборка точно прошла)
 dnf install -y \
-    antigravity \
     git \
     python3-pip \
     typst \
@@ -22,5 +13,5 @@ dnf install -y \
     fastfetch \
     distrobox
 
-# 3. Очистка
+# 2. Очистка кэша
 dnf clean all
