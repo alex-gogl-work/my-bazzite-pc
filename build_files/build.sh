@@ -1,24 +1,21 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -ouex pipefail
 
-### Install packages
+# 1. Добавляем репозиторий Google Antigravity (Актуально для 2026)
+dnf config-manager --add-repo https://packages.antigravity.google/rpm
 
-# Packages can be installed from any enabled yum repo on the image.
-# RPMfusion repos are available by default in ublue main images
-# List of rpmfusion packages can be found here:
-# https://mirrors.rpmfusion.org/mirrorlist?path=free/fedora/updates/43/x86_64/repoview/index.html&protocol=https&redirect=1
+# 2. Установка системных пакетов (Layering)
+# Эти программы будут вшиты в само ядро твоей системы
+dnf install -y \
+    antigravity \
+    git \
+    python3-pip \
+    typst \
+    fish \
+    btop \
+    fastfetch \
+    distrobox
 
-# this installs a package from fedora repos
-dnf5 install -y tmux 
-
-# Use a COPR Example:
-#
-# dnf5 -y copr enable ublue-os/staging
-# dnf5 -y install package
-# Disable COPRs so they don't end up enabled on the final image:
-# dnf5 -y copr disable ublue-os/staging
-
-#### Example for enabling a System Unit File
-
-systemctl enable podman.socket
+# 3. Очистка кэша, чтобы образ был легким
+dnf clean all
